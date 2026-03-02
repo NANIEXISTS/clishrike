@@ -1,183 +1,160 @@
 <div align="center">
 
-<img src="https://cli.shrike.pro/favicon.ico" width="60" alt="Shrike CLI">
+<img src="https://cli.shrike.pro/favicon.ico" width="80" alt="Shrike CLI Logo">
 
-# CLI.SHRIKE
+# 🦅 Shrike CLI
 
-**Deterministic Financial Risk Scanner for Stripe Integrations**
+**The Deterministic Financial Risk Scanner for Stripe Integrations.**
 
-[![Version](https://img.shields.io/badge/version-1.0.0--poc-red?style=flat-square)](https://cli.shrike.pro)
-[![License](https://img.shields.io/badge/license-Commercial-gray?style=flat-square)](https://cli.shrike.pro/terms.html)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue?style=flat-square)](#installation)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=flat-square)](https://python.org)
+[![Version](https://img.shields.io/badge/version-1.0.0--poc-red?style=for-the-badge)](https://cli.shrike.pro)
+[![License](https://img.shields.io/badge/license-Commercial-gray?style=for-the-badge)](https://cli.shrike.pro/terms.html)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue?style=for-the-badge)](#quick-start)
+[![Status](https://img.shields.io/badge/status-Public_Beta-success?style=for-the-badge)](#quick-start)
 
-**[Website](https://cli.shrike.pro) · [Demo](https://cli.shrike.pro/demo-video.html) · [Terms](https://cli.shrike.pro/terms.html)**
+**[Website](https://cli.shrike.pro) • [Demo](https://cli.shrike.pro/#demo) • [Terms](https://cli.shrike.pro/terms.html)**
 
----
-
-*If it prints red — you are going to lose money.*
+<br>
+<i>If it prints red — you are going to lose money.</i>
+<br><br>
 
 </div>
 
 ---
 
-## What is Shrike?
+## 🛑 The Problem
 
-Shrike is a locally-executed, deterministic CLI that performs deep static analysis and forensic parsing of your Stripe integration. It goes beyond generic linting to catch the specific, silent bugs that cause:
+Generic linters (ESLint, Prettier, Semgrep) check for code style, syntax errors, and common security flaws. **They do not understand business logic.**
 
-- 💸 Double charges on network timeouts (missing idempotency keys)
-- 🔑 Hardcoded live API secrets in source code
-- 🔄 Duplicate webhook processing (missing event deduplication)
-- 🧩 Partial database commits after successful payment
-- 🚫 Subscription stuck in `incomplete` state
-- 🔀 Race conditions between frontend confirmation and webhook delivery
+They will not tell you when a network timeout silently double-charges your customer. They will not warn you when a webhook handler consumes a stream improperly, permanently breaking signature verification in production. 
 
-**Zero cloud. Zero uploads. Runs entirely on your machine.**
+Stripe bugs don't crash your app—they silently bleed revenue, upset customers, and ruin unit economics.
 
----
+## 🛡️ The Solution
 
-## Commands
+**Shrike CLI** is a locally-executed, deterministic engine that performs deep static analysis and forensic parsing of your Stripe integration. It is purpose-built to catch financial edge cases before they reach production.
 
-```
-shrike activate <LICENSE_KEY>    Activate your license
-shrike audit   <./path>          Deep AST scan of a repository
-shrike analyze <payload.txt>     Forensic parse of a Stripe webhook log
-shrike watch   <logfile.txt>     Real-time file monitor for live Stripe logs
-```
+### Core Capabilities
+
+| Mode | Command | Description |
+|---|---|---|
+| **Audit** | `shrike audit <path>` | Scans repositories in milliseconds to flag missing idempotency keys, unprotected endpoints, and exposed live secrets. |
+| **Analyze** | `shrike analyze <file>` | Forensically parses Stripe webhook payloads and server logs to diagnose complex state-machine failures. |
+| **Watch** | `shrike watch <file>` | Securely tails local log files during development, throwing instant alerts when vulnerabilities are triggered. |
+
+> **Privacy First:** Shrike runs **100% locally**. Your source code never leaves your filesystem. There is zero telemetry, zero cloud calls, and zero analytics. The only outbound network call is the optional Gemini LLM fallback in the `analyze` command.
 
 ---
 
-## Installation
+## ⚡ Quick Start
 
-### Prerequisites
-- Python 3.10+
-- `pip`
+Shrike is distributed as a cross-platform Python package. Requires Python 3.10+.
 
-### macOS / Linux
+### 1. Download
+Download the latest `shrike-cli.zip` from [cli.shrike.pro](https://cli.shrike.pro/#download).
 
+### 2. Install (macOS / Linux)
 ```bash
-# 1. Unzip the release
-unzip shrike-cli-early-access.zip && cd shrike-cli
+# Unzip and enter directory
+unzip shrike-cli-early-access.zip -d shrike-cli && cd shrike-cli
 
-# 2. (Recommended) Create a virtual environment
+# Create isolated environment (recommended)
 python3 -m venv venv && source venv/bin/activate
 
-# 3. Install the engine
+# Install the engine
 pip install .
 
-# 4. Activate with the Public Beta key
+# Activate the Free Beta
 shrike activate BETA-SHRIKE-POC
 ```
 
-### Windows (PowerShell)
-
+### 2. Install (Windows PowerShell)
 ```powershell
-# 1. Expand the downloaded archive
+# Expand and enter directory
 Expand-Archive .\shrike-cli-early-access.zip -DestinationPath .\shrike-cli
 cd .\shrike-cli
 
-# 2. Create a virtual environment
+# Create isolated environment (recommended)
 py -m venv venv
 .\venv\Scripts\activate
 
-# 3. Install the engine
+# Install the engine
 pip install .
 
-# 4. Activate
+# Activate the Free Beta
 shrike activate BETA-SHRIKE-POC
 ```
 
-**[⬇ Download Free Beta](https://cli.shrike.pro/#download)**
+### 3. Run
+```bash
+# Scan your entire project repository
+shrike audit ./my-saas-backend
+```
 
 ---
 
-## Example Output
+## 📊 Example Output
 
-```
+When Shrike detects a vulnerability, it outputs a ranked, CFO-level financial risk matrix with exact file locations, financial impacts, and required patches.
+
+```text
 ╭──────────────────── SHRIKE REPO AUDIT START ────────────────────╮
 │ ✓ Traversed 412 files. Ignored 300. Isolated 12 Stripe files.   │
 ╰─────────────────────────────────────────────────────────────────╯
 
 ╭──────────────────── FINANCIAL THREAT MATRIX ────────────────────╮
-│ CRITICAL RISKS (2)                                               │
-│  1. HARDCODED_LIVE_KEY                                           │
-│  2. MISSING_IDEMPOTENCY_KEY                                      │
+│ CRITICAL RISKS (2)                                              │
+│  1. HARDCODED_LIVE_KEY                                          │
+│  2. MISSING_IDEMPOTENCY_KEY                                     │
 ╰─────────────────────────────────────────────────────────────────╯
 
 ──────────────────────────────────────────────
-[CRITICAL] HARDCODED_LIVE_KEY
+[CRITICAL] MISSING_IDEMPOTENCY_KEY
 
-Location:  src/app/api/webhook/route.ts:4
+Location:
+- src/services/billing.ts:42
 
 Financial Impact:
-  Live Stripe secret exposed in source code.
-  Immediate account compromise risk.
+Network timeouts will cause duplicate charges and immediate chargebacks.
 
 Patch Goal:
-  Move secret to runtime env var immediately.
+Pass idempotencyKey (or idempotency_key) in the PaymentIntent creation payload.
+──────────────────────────────────────────────
 ```
 
 ---
 
-## Rule Categories
+## 🧠 Rule Engine Domains
 
-Shrike ships with rules across 5 risk domains:
+Shrike ships with rules mapped across 5 specific risk tiers:
 
-| Layer | Category | Example Rules |
-|---|---|---|
-| 1 | State Machine Integrity | `PAYMENT_INTENT_REQUIRES_ACTION`, `SUBSCRIPTION_STUCK_INCOMPLETE` |
-| 2 | Idempotency & Concurrency | `WEBHOOK_IDEMPOTENCY_FAILURE`, `RACE_CONDITION_DUPLICATE_PAYMENT` |
-| 3 | Database & Logic Boundaries | `PARTIAL_TRANSACTION_COMMIT`, `REFUND_STATE_INCONSISTENCY` |
-| 4 | Configuration & Edge Cases | `FLOAT_PRECISION_CURRENCY_ERROR`, `ENVIRONMENT_KEY_MISMATCH` |
-| 5 | Framework-Specific | `NEXTJS_APP_ROUTER_WEBHOOK_RAW_BODY_ERROR`, `EXPRESS_WEBHOOK_SIGNATURE_VERIFICATION_FAILURE` |
+1. **State Machine Integrity** (e.g., `PAYMENT_INTENT_REQUIRES_ACTION`)
+2. **Idempotency & Concurrency** (e.g., `RACE_CONDITION_DUPLICATE_PAYMENT`)
+3. **Database Boundaries** (e.g., `PARTIAL_TRANSACTION_COMMIT`)
+4. **Configuration Edge Cases** (e.g., `FLOAT_PRECISION_CURRENCY_ERROR`)
+5. **Framework-Specific Traps** (e.g., `NEXTJS_APP_ROUTER_WEBHOOK_BODY_TRAP`)
 
 ---
 
-## Forensic Analysis (`shrike analyze`)
+## 🗺️ Roadmap
 
-For webhook log analysis, Shrike uses a combination of deterministic state-machine pattern matching and an optional Gemini LLM fallback layer for complex multi-event correlation.
-
-```bash
-# Analyze a captured Stripe webhook event log
-shrike analyze ./webhook_log.txt
-
-# Works offline without GEMINI_API_KEY (deterministic mode only)
-export GEMINI_API_KEY=your_key_here
-shrike analyze ./webhook_log.txt
-```
+- [x] **v1.0.0-poc:** Public Beta (Audit, Analyze, Watch)
+- [ ] **Pro Tier:** 50+ Extended Rules (Subscriptions, Connect, Multi-currency)
+- [ ] **Pro Tier:** CI/CD GitHub Action enforcement
+- [ ] **Pro Tier:** PDF/HTML Export Reports
+- [ ] **Team Tier:** AI-assisted patch generation
 
 ---
 
-## Privacy
+## ⚖️ License & Legal
 
-- `shrike audit` runs **100% locally**. Your source code never leaves your machine.
-- `shrike analyze` optionally uses the Gemini API for advanced correlation. Do not include PII or raw secrets in payload files passed to this command.
-- License activation makes a single HTTPS request to verify your key. No telemetry, no analytics.
+Shrike CLI is commercial software built by [NANIEXISTS](https://shrike.pro).
 
----
+The current version is available as a **Free Public Beta** using the activation key `BETA-SHRIKE-POC`. A commercial license will be required for the upcoming Pro tier and production CI/CD deployments.
 
-## Roadmap
+- **[Terms of Service](https://cli.shrike.pro/terms.html)**
+- **[Refund Policy](https://cli.shrike.pro/refund.html)**
 
-- [x] `shrike audit` — AST-based repo scanning
-- [x] `shrike analyze` — Forensic webhook payload parsing  
-- [x] `shrike watch` — Real-time log file monitoring
-- [ ] Expanded rule set (50+ rules) — *Pro tier*
-- [ ] `shrike report` — HTML/PDF audit export — *Pro tier*
-- [ ] GitHub Action for CI/CD pipeline enforcement — *Pro tier*
-- [ ] `shrike fix` — AI-assisted patch generation — *Team tier*
-
----
-
-## License
-
-Shrike CLI is commercial software. The Public Beta is freely available under the key `BETA-SHRIKE-POC`.
-
-A commercial license is required for production use, team deployment, or access to Pro features.
-
-[Terms of Service](https://cli.shrike.pro/terms.html) · [Refund Policy](https://cli.shrike.pro/refund.html) · [cli.shrike.pro](https://cli.shrike.pro)
-
----
-
+<br>
 <div align="center">
-Built by <a href="https://shrike.pro">NANIEXISTS</a> · <a href="mailto:support@shrike.pro">support@shrike.pro</a>
+  <sub>Built securely by <a href="https://shrike.pro">Rahul</a>. Needs help? <a href="mailto:support@shrike.pro">support@shrike.pro</a></sub>
 </div>
