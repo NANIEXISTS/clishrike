@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://cli.shrike.pro/favicon.ico" width="80" alt="Shrike CLI Logo">
+<img src="./logo.png" width="120" alt="Shrike CLI Logo">
 
 # Shrike CLI
 
